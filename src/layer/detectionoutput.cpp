@@ -176,26 +176,26 @@ int DetectionOutput::forward(const std::vector<Mat>& bottom_blobs, std::vector<M
             continue;
         }
         const float* loc = location_ptr + i * 4;
-        const float* pb = priorbox_ptr + i * 4;
-        const float* var = variance_ptr ? variance_ptr + i * 4 : variances;
+        // const float* pb = priorbox_ptr + i * 4;
+        // const float* var = variance_ptr ? variance_ptr + i * 4 : variances;
 
         float* bbox = bboxes.row(i);
 
-        // CENTER_SIZE
-        float pb_w = pb[2] - pb[0];
-        float pb_h = pb[3] - pb[1];
-        float pb_cx = (pb[0] + pb[2]) * 0.5f;
-        float pb_cy = (pb[1] + pb[3]) * 0.5f;
+        // // CENTER_SIZE
+        // float pb_w = pb[2] - pb[0];
+        // float pb_h = pb[3] - pb[1];
+        // float pb_cx = (pb[0] + pb[2]) * 0.5f;
+        // float pb_cy = (pb[1] + pb[3]) * 0.5f;
 
-        float bbox_cx = var[0] * loc[0] * pb_w + pb_cx;
-        float bbox_cy = var[1] * loc[1] * pb_h + pb_cy;
-        float bbox_w = static_cast<float>(exp(var[2] * loc[2]) * pb_w);
-        float bbox_h = static_cast<float>(exp(var[3] * loc[3]) * pb_h);
+        // float bbox_cx = var[0] * loc[0] * pb_w + pb_cx;
+        // float bbox_cy = var[1] * loc[1] * pb_h + pb_cy;
+        // float bbox_w = static_cast<float>(exp(var[2] * loc[2]) * pb_w);
+        // float bbox_h = static_cast<float>(exp(var[3] * loc[3]) * pb_h);
 
-        bbox[0] = bbox_cx - bbox_w * 0.5f;
-        bbox[1] = bbox_cy - bbox_h * 0.5f;
-        bbox[2] = bbox_cx + bbox_w * 0.5f;
-        bbox[3] = bbox_cy + bbox_h * 0.5f;
+        bbox[0] = loc[0];
+        bbox[1] = loc[1];
+        bbox[2] = loc[2];
+        bbox[3] = loc[3];
     }
 
     // sort and nms for each class
